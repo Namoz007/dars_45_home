@@ -5,7 +5,6 @@ import 'package:dars_45_home/views/widgets/show_products.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class AdminPanel extends StatefulWidget {
   const AdminPanel({super.key});
 
@@ -22,9 +21,16 @@ class _AdminPanelState extends State<AdminPanel> {
         title: Text("Admin Panel"),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: (){
-            showDialog(context: context, builder: (ctx) => DialogForProducts(isEdit: false));
-          }, icon: Icon(Icons.add),)
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => DialogForProducts(isEdit: false),
+                barrierDismissible: false,
+              );
+            },
+            icon: Icon(Icons.add),
+          )
         ],
       ),
       drawer: CustomDrawer(),
@@ -33,7 +39,7 @@ class _AdminPanelState extends State<AdminPanel> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ShowProducts(products: productsController.getProducts(),isEdit: true,),
+              // child: ShowProducts(products: productsController.getProducts(),isEdit: true,),
             ),
           ],
         ),

@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>galeriyaga ruxsat ber uka bomasa olasan</string>
+	<key>NSCameraUsageDescription</key>
+	<string>kameraga ruxsat ber uka bomasa olasana</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>mikrafonga ruxsat ber uka</string>
 </dict>
 </plist>

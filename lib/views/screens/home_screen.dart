@@ -21,8 +21,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final productsController = Provider.of<ProductsController>(context);
-    final products = productsController.getProducts();
+    // final products = productsController.getProducts();
     final cartController = Provider.of<CartController>(context);
+    // productsController.getProducts();
+
 
     return Scaffold(
       appBar: AppBar(
@@ -54,7 +56,29 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ShowCategories(),
               ),
               SizedBox(height: 20),
-              ShowProducts(products: products,)
+
+              StreamBuilder(
+                stream: productsController.getProducts,
+                builder: (context,snapshot){
+                  if(snapshot.connectionState == ConnectionState.waiting){
+                    return Center(child: CircularProgressIndicator(color: Colors.red,),);
+                  }
+
+                  if(snapshot.hasError){
+                    return Center(child: Text("Malumot olishda hatolik yuzaga keldi",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.red),),);
+                  }
+
+                  final response = snapshot.data;
+                  List<Product> products = [];
+                  if(snapshot != null){
+                    products = snapshot.data!.docs.map((doc) {
+                      final data = doc.data() as Map<String, dynamic>;
+                      return Product.fromJson(data);
+                    }).toList();
+                  }
+                  return response == null ? Center(child: Text("Hozircha ma'lumotlar yo'q"),) : ShowProducts(products: products);
+                },
+              )
             ],
           ),
         ),

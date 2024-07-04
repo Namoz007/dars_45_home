@@ -32,11 +32,13 @@ class _ShowProductsState extends State<ShowProducts> {
         return InkWell(
           onTap: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ShowProduct(
-                          product: productForShow,
-                        )));
+              context,
+              MaterialPageRoute(
+                builder: (context) => ShowProduct(
+                  product: productForShow,
+                ),
+              ),
+            );
           },
           child: Container(
               // width: 200,
@@ -45,7 +47,7 @@ class _ShowProductsState extends State<ShowProducts> {
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(15),
                   image: DecorationImage(
-                      image: NetworkImage("${productForShow.imgs[0]}"),
+                      image: NetworkImage("${productForShow.imgs}"),
                       fit: BoxFit.fill)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,27 +56,35 @@ class _ShowProductsState extends State<ShowProducts> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      widget.isEdit ? Row(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              productController.removeProduct(productForShow.id);
-                            },
-                            child: Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              showDialog(context: context, builder: (ctx){
-                                return DialogForProducts(isEdit: true,product: productForShow,);
-                              });
-                            },
-                            child: Icon(Icons.edit),
-                          ),
-                        ],
-                      ) : SizedBox(),
+                      widget.isEdit
+                          ? Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    productController
+                                        .removeProduct(productForShow.id);
+                                  },
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (ctx) {
+                                          return DialogForProducts(
+                                            isEdit: true,
+                                            product: productForShow,
+                                          );
+                                        });
+                                  },
+                                  child: Icon(Icons.edit),
+                                ),
+                              ],
+                            )
+                          : SizedBox(),
                       Row(
                         children: [
                           Text(

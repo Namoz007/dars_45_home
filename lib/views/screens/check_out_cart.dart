@@ -71,14 +71,14 @@ class _CheckOutCartState extends State<CheckOutCart> {
                                     width: 110,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
-                                        image: DecorationImage(
-                                            image: NetworkImage(cartController
-                                                .getCart()[index]
-                                                .product
-                                                .imgs[0]))),
+                                        // image: DecorationImage(
+                                        //     image: NetworkImage(cartController
+                                        //         .getCart()[index]
+                                        //         .product
+                                        //         .imgs))),
                                   ),
-                                  SizedBox(
-                                    width: 20,
+                                  // SizedBox(
+                                  //   width: 20,
                                   ),
                                   Column(
                                     crossAxisAlignment:

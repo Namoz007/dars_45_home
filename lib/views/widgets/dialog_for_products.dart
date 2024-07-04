@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:dars_45_home/controllers/products_controller.dart';
 import 'package:dars_45_home/models/product.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class DialogForProducts extends StatefulWidget {
@@ -16,13 +19,43 @@ class _DialogForProductsState extends State<DialogForProducts> {
   final _formKey = GlobalKey<FormState>();
   final productTitle = TextEditingController();
   final productPrice = TextEditingController();
-  final firstImg = TextEditingController();
-  final secondImg = TextEditingController();
-  final threedImg = TextEditingController();
+  List<File> imgs = [];
   final productRating = TextEditingController();
   final productDescription = TextEditingController();
   String productStatus = 'Product Status';
   String? error;
+  int count = 0;
+
+  void openGallery() async {
+    final imagePicker = ImagePicker();
+    final XFile? pickedImage = await imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+      requestFullMetadata: false,
+    );
+
+    if (pickedImage != null) {
+      setState(() {
+        imgs.add(File(pickedImage.path));
+      });
+    }
+  }
+
+  void openCamera() async {
+    final imagePicker = ImagePicker();
+    final XFile? pickedImage = await imagePicker.pickImage(
+      source: ImageSource.camera,
+      requestFullMetadata: false,
+    );
+
+    if (pickedImage != null) {
+      setState(() {
+        imgs.add(File(pickedImage.path));
+        // imageFile = File(pickedImage.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final productsController = Provider.of<ProductsController>(context);
@@ -90,81 +123,6 @@ class _DialogForProductsState extends State<DialogForProducts> {
               SizedBox(
                 height: 20,
               ),
-              widget.isEdit
-                  ? SizedBox()
-                  : Column(
-                      children: [
-                        TextFormField(
-                          validator: (value){
-                            if(widget.isEdit){
-                              return null;
-                            }else{
-                              if(value == null || value.isEmpty)
-                                return "Please,return enter product first img";
-
-                              return null;
-                            }
-                          },
-                          controller: firstImg,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              hintText: widget.isEdit
-                                  ? "${widget.product!.imgs[0]}"
-                                  : "Product First Img"),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          validator: (value){
-                            if(widget.isEdit){
-                              return null;
-                            }else{
-                              if(value == null || value.isEmpty)
-                                return "Please,return enter product second img";
-
-                              return null;
-                            }
-                          },
-                          controller: secondImg,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              hintText: widget.isEdit
-                                  ? "${widget.product!.imgs[0]}"
-                                  : "Product Second Img"),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          validator: (value){
-                            if(widget.isEdit){
-                              return null;
-                            }else{
-                              if(value == null || value.isEmpty)
-                                return "Please,return enter product threed img";
-
-                              return null;
-                            }
-                          },
-                          controller: threedImg,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              hintText: widget.isEdit
-                                  ? "${widget.product!.imgs[0]}"
-                                  : "Product Threed Img"),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ),
               TextFormField(
                 validator: (value) {
                   if (value == null || value.isEmpty)
@@ -229,6 +187,24 @@ class _DialogForProductsState extends State<DialogForProducts> {
                       child: Text("${productsController.getStatus()[i]}"),
                     )
                 ],
+              ),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: openGallery,
+                        icon: Icon(Icons.photo),
+                      ),
+                      IconButton(
+                        onPressed: openCamera,
+                        icon: Icon(Icons.camera),
+                      ),
+                    ],
+                  ),
+                  Text("Imgs count: ${imgs.length} / 3")
+                ],
               )
             ],
           ),
@@ -241,23 +217,35 @@ class _DialogForProductsState extends State<DialogForProducts> {
           },
           child: Text("Cancel"),
         ),
-        ElevatedButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              if(productStatus != "Poduct Status"){
-                error = null;
-                widget.isEdit ? productsController.editProduct(Product(id: widget.product!.id, title: productTitle.text, price: double.parse(productPrice.text), imgs: [], rating: double.parse(productRating.text), description: productDescription.text, status: productStatus)) : productsController.addProduct(Product(id: 0, title: productTitle.text, price: double.parse(productPrice.text), imgs: [firstImg.text,secondImg.text,threedImg.text], rating: double.parse(productRating.text), description: productDescription.text, status: productStatus));
-
-                Navigator.pop(context);
-              }else{
-                setState(() {
-                  error = "Please,retunr choose product status";
-                });
-              }
-            }
-          },
-          child: Text("Save"),
-        ),
+        imgs.length == 3
+            ? ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    if (productStatus != "Poduct Status") {
+                      error = null;
+                      productsController.addProductInFirebase(
+                        Product(
+                            globalId: '',
+                            id: 1,
+                            title: productTitle.text,
+                            price: double.parse(productPrice.text),
+                            imgs: [],
+                            isFavorite: false,
+                            rating: double.parse(productRating.text),
+                            description: productDescription.text,
+                            status: productStatus),
+                        imgs,
+                      );
+                    } else {
+                      setState(() {
+                        error = "Please,retunr choose product status";
+                      });
+                    }
+                  }
+                },
+                child: Text("Save"),
+              )
+            : SizedBox()
       ],
     );
   }

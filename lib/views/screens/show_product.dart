@@ -23,7 +23,7 @@ class _HomeScreenState extends State<ShowProduct> {
   Widget build(BuildContext context) {
     final productController = Provider.of<ProductsController>(context);
     // print(product.title);
-    final controlerProduct = productController.getProducts().where((element) => element.id == widget.product.id);
+    // final controlerProduct = productController.getProducts().where((element) => element.id == widget.product.id);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -54,10 +54,10 @@ class _HomeScreenState extends State<ShowProduct> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    flex: 1,
-                    child: ShowImg(imgUrl: widget.product.imgs[selectImg]),
-                  ),
+                  // Expanded(
+                  //   flex: 1,
+                    // child: ShowImg(imgUrl: widget.product.imgs),
+                  // ),
                   Expanded(
                     flex: 1,
                     child: Padding(
@@ -112,29 +112,29 @@ class _HomeScreenState extends State<ShowProduct> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              for (int i = 0; i < widget.product.imgs.length; i++)
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 5),
-                                  child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        selectImg = i;
-                                      });
-                                    },
-                                    child: Container(
-                                      height: 30,
-                                      width: 30,
-                                      decoration: BoxDecoration(
-                                          color: Color.fromARGB(
-                                              Random().nextInt(255),
-                                              Random().nextInt(255),
-                                              Random().nextInt(255),
-                                              100),
-                                          shape: BoxShape.circle),
-                                    ),
-                                  ),
-                                )
+                              // for (int i = 0; i < widget.product.imgs.length; i++)
+                              //   Padding(
+                              //     padding:
+                              //         const EdgeInsets.symmetric(horizontal: 5),
+                              //     child: InkWell(
+                              //       onTap: () {
+                              //         setState(() {
+                              //           selectImg = i;
+                              //         });
+                              //       },
+                              //       child: Container(
+                              //         height: 30,
+                              //         width: 30,
+                              //         decoration: BoxDecoration(
+                              //             color: Color.fromARGB(
+                              //                 Random().nextInt(255),
+                              //                 Random().nextInt(255),
+                              //                 Random().nextInt(255),
+                              //                 100),
+                              //             shape: BoxShape.circle),
+                              //       ),
+                              //     ),
+                              //   )
                             ],
                           )
                         ],

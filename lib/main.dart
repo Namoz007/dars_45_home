@@ -1,11 +1,20 @@
 import 'package:dars_45_home/controllers/cart_controller.dart';
 import 'package:dars_45_home/controllers/products_controller.dart';
 import 'package:dars_45_home/controllers/rooms_controller.dart';
+import 'package:dars_45_home/firebase_options.dart';
 import 'package:dars_45_home/views/screens/home_screen.dart';
+import 'package:dars_45_home/views/screens/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+//yangilandi
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      name: "name-here",
+      options: DefaultFirebaseOptions.currentPlatform
+  );
   runApp(const MainApp());
 }
 
@@ -35,7 +44,29 @@ class MainApp extends StatelessWidget {
       builder: (context,child){
         return MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: HomeScreen()
+            home: StreamBuilder(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.red,
+                    ),
+                  );
+                }
+
+                if (snapshot.hasError)
+                  return Text(
+                    "Xatolik kelilb chiqdi",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                    ),
+                  );
+
+                return snapshot.data == null ? LoginScreen() : HomeScreen();
+              },
+            )
         );
       },
     );

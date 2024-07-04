@@ -1,6 +1,8 @@
+import 'package:dars_45_home/main.dart';
 import 'package:dars_45_home/views/screens/admin_panel.dart';
 import 'package:dars_45_home/views/screens/home_screen.dart';
 import 'package:dars_45_home/views/screens/ordered_products.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -42,6 +44,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AdminPanel()));
             },
             title: Text("Admin Panel"),
+            trailing: Icon(Icons.navigate_next),
+          ),
+
+
+          SizedBox(height: 10,),
+
+          ListTile(
+            onTap: (){
+              FirebaseAuth.instance.signOut();
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainApp()));
+            },
+            title: Text("Log Out"),
             trailing: Icon(Icons.navigate_next),
           ),
         ],
