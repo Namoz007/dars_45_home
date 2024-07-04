@@ -41,14 +41,12 @@ class _ShowProductsState extends State<ShowProducts> {
             );
           },
           child: Container(
-              // width: 200,
-              // height00,
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(15),
                   image: DecorationImage(
-                      image: NetworkImage("${productForShow.imgs}"),
-                      fit: BoxFit.fill)),
+                      image: NetworkImage("${productForShow.imgs![0]}"),
+                      fit: BoxFit.fill),),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

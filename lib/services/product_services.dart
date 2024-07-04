@@ -19,12 +19,16 @@ class ProductServices{
         .child("products");
 
     for (int i = 0; i < imgs.length; i++) {
-      final uploadTask = await imageReference.child("${imgs[i]}").putFile(
+      final uploadTask = imageReference.child("${UniqueKey()}").putFile(
         imgs[i],
       );
 
-      final data = await imageReference.getDownloadURL();
-      print(data);
+      uploadTask.whenComplete(() {
+        final data = imageReference.getDownloadURL();
+        print(data);
+      });
+
+
       // product.imgs!.add(data);
     }
 

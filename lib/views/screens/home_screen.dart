@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Center(child: Text("Malumot olishda hatolik yuzaga keldi",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.red),),);
                   }
 
-                  final response = snapshot.data;
+                  final response = snapshot.data!.docs;
                   List<Product> products = [];
                   if(snapshot != null){
                     products = snapshot.data!.docs.map((doc) {
