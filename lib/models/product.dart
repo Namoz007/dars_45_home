@@ -1,4 +1,6 @@
 
+import 'dart:ffi';
+
 class Product {
   String globalId;
   int id;
@@ -28,11 +30,11 @@ class Product {
       globalId: json['globalId'],
       id: json['id'],
       title: json['title'],
-      price: double.parse(json['price']),
+      price: double.parse(json['price'].toString()),
       imgs: json['imgs'] != null ? List<String>.from(json['imgs']) : null,
-      rating: double.parse(json['rating']),
+      rating: double.parse(json['rating'].toString()),
       description: json['description'],
-      isFavorite: bool.parse(json['isFavorite']) ?? false,
+      isFavorite: bool.parse(json['isFavorite'].toString()) ?? false,
       status: json['status'],
     );
   }

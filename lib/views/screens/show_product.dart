@@ -54,10 +54,10 @@ class _HomeScreenState extends State<ShowProduct> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Expanded(
-                  //   flex: 1,
-                    // child: ShowImg(imgUrl: widget.product.imgs),
-                  // ),
+                  Expanded(
+                    flex: 1,
+                    child: ShowImg(imgUrl: widget.product.imgs![0]),
+                  ),
                   Expanded(
                     flex: 1,
                     child: Padding(
@@ -112,29 +112,29 @@ class _HomeScreenState extends State<ShowProduct> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              // for (int i = 0; i < widget.product.imgs.length; i++)
-                              //   Padding(
-                              //     padding:
-                              //         const EdgeInsets.symmetric(horizontal: 5),
-                              //     child: InkWell(
-                              //       onTap: () {
-                              //         setState(() {
-                              //           selectImg = i;
-                              //         });
-                              //       },
-                              //       child: Container(
-                              //         height: 30,
-                              //         width: 30,
-                              //         decoration: BoxDecoration(
-                              //             color: Color.fromARGB(
-                              //                 Random().nextInt(255),
-                              //                 Random().nextInt(255),
-                              //                 Random().nextInt(255),
-                              //                 100),
-                              //             shape: BoxShape.circle),
-                              //       ),
-                              //     ),
-                              //   )
+                              for (int i = 0; i < widget.product.imgs!.length; i++)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        selectImg = i;
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 30,
+                                      width: 30,
+                                      decoration: BoxDecoration(
+                                          color: Color.fromARGB(
+                                              Random().nextInt(255),
+                                              Random().nextInt(255),
+                                              Random().nextInt(255),
+                                              100),
+                                          shape: BoxShape.circle),
+                                    ),
+                                  ),
+                                )
                             ],
                           )
                         ],
@@ -167,10 +167,8 @@ class _HomeScreenState extends State<ShowProduct> {
                       shape: BoxShape.circle
                     ),
                     child: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          productController.favorite(widget.product.id);
-                        });
+                      onPressed: () async{
+                        productController.likeProduct(widget.product.globalId, widget.product.isFavorite);
                       },
                       icon: 
                           widget.product.isFavorite ? Icon(

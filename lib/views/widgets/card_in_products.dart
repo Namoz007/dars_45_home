@@ -74,10 +74,10 @@ class _CardInProductsState extends State<CardInProducts> {
                           width: 80,
                           height: 120,
                           decoration: BoxDecoration(
-                              // image: DecorationImage(
-                                  // image: NetworkImage("${product.product.imgs[0]}"),
-                                  // fit: BoxFit.fitHeight
-                              // ),
+                              image: DecorationImage(
+                                  image: NetworkImage("${product.product.imgs![0]}"),
+                                  fit: BoxFit.fitHeight
+                              ),
                               borderRadius: BorderRadius.circular(15)
                           ),
                         ),

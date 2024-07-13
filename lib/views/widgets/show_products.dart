@@ -15,10 +15,11 @@ class ShowProducts extends StatefulWidget {
 }
 
 class _ShowProductsState extends State<ShowProducts> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final productController = Provider.of<ProductsController>(context);
-    return GridView.builder(
+    return isLoading ? Center(child: CircularProgressIndicator(color: Colors.red,),) : GridView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -42,11 +43,11 @@ class _ShowProductsState extends State<ShowProducts> {
           },
           child: Container(
               decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(15),
-                  image: DecorationImage(
-                      image: NetworkImage("${productForShow.imgs![0]}"),
-                      fit: BoxFit.fill),),
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                    image: NetworkImage("${productForShow.imgs![0]}"),
+                    fit: BoxFit.fill),),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,32 +57,38 @@ class _ShowProductsState extends State<ShowProducts> {
                     children: [
                       widget.isEdit
                           ? Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    productController
-                                        .removeProduct(productForShow.id);
-                                  },
-                                  child: Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (ctx) {
-                                          return DialogForProducts(
-                                            isEdit: true,
-                                            product: productForShow,
-                                          );
-                                        });
-                                  },
-                                  child: Icon(Icons.edit),
-                                ),
-                              ],
-                            )
+                        children: [
+                          InkWell(
+                            onTap: () async{
+                              setState(() {
+                                isLoading = true;
+                              });
+                              await productController
+                                  .deleteProduct(productForShow.globalId);
+                              setState(() {
+                                isLoading = false;
+                              });
+                            },
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (ctx) {
+                                    return DialogForProducts(
+                                      isEdit: true,
+                                      product: productForShow,
+                                    );
+                                  });
+                            },
+                            child: Icon(Icons.edit),
+                          ),
+                        ],
+                      )
                           : SizedBox(),
                       Row(
                         children: [
@@ -94,9 +101,9 @@ class _ShowProductsState extends State<ShowProducts> {
                           ),
                           productForShow.rating != 0
                               ? Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                )
+                            Icons.star,
+                            color: Colors.amber,
+                          )
                               : SizedBox()
                         ],
                       ),
@@ -127,8 +134,14 @@ class _ShowProductsState extends State<ShowProducts> {
                                   color: Colors.green),
                             ),
                             InkWell(
-                              onTap: () {
-                                productController.favorite(productForShow.id);
+                              onTap: () async{
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                await productController.likeProduct(productForShow.globalId, productForShow.isFavorite);
+                                setState(() {
+                                  isLoading = false;
+                                });
                               },
                               child: Container(
                                   height: 30,
@@ -140,9 +153,9 @@ class _ShowProductsState extends State<ShowProducts> {
                                       shape: BoxShape.circle),
                                   child: productForShow.isFavorite
                                       ? Icon(
-                                          Icons.favorite,
-                                          color: Colors.red,
-                                        )
+                                    Icons.favorite,
+                                    color: Colors.red,
+                                  )
                                       : Icon(Icons.favorite_border)),
                             )
                           ],

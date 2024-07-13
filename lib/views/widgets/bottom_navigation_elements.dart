@@ -15,7 +15,7 @@ class BottomNavigationElements extends StatefulWidget {
 class _BottomNavigationElementsState extends State<BottomNavigationElements> {
   @override
   Widget build(BuildContext context) {
-    final cartController = Provider.of<CartController>(context,listen: false);
+    final cartController = Provider.of<CartController>(context,listen: true);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [

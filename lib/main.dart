@@ -8,7 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-//yangilandi
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -56,7 +55,7 @@ class MainApp extends StatelessWidget {
                 }
 
                 if (snapshot.hasError)
-                  return Text(
+                  return const Text(
                     "Xatolik kelilb chiqdi",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -64,7 +63,9 @@ class MainApp extends StatelessWidget {
                     ),
                   );
 
-                return snapshot.data == null ? LoginScreen() : HomeScreen();
+                print("Bu snapshotdan kelayotgan malumot $snapshot");
+
+                return snapshot.data == null ? const LoginScreen() : const HomeScreen();
               },
             )
         );

@@ -13,6 +13,9 @@ class ProductsController extends ChangeNotifier {
   ];
   List<Product> _products = [];
 
+  List<Product> getProductInList() {
+    return [..._products];
+  }
   Future<void> addProductInFirebase(Product product,List<File> imgs) async{
     _productServices.addProduct(product, imgs);
   }
@@ -47,16 +50,15 @@ class ProductsController extends ChangeNotifier {
     return [..._products.where((element) => element.status == status)];
   }
 
-  void editProduct(Product product) {
-    for (int i = 0; i < _products.length; i++)
-      if (_products[i].id == product.id) {
-        _products[i].title = product.title;
-        _products[i].price = product.price;
-        _products[i].rating = product.rating;
-        _products[i].description = product.description;
-        _products[i].status = product.status;
-      }
+  Future<void> likeProduct(String globalId,bool like) async{
+    await _productServices.likeProduct(globalId, like);
+  }
 
-    notifyListeners();
+  Future<void> editProduct(Product product) async{
+    await _productServices.editProduct(product);
+  }
+
+  Future<void> deleteProduct(String globalId) async{
+    await _productServices.removeProduct(globalId);
   }
 }

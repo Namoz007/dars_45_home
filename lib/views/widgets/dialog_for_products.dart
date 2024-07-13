@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dars_45_home/controllers/products_controller.dart';
 import 'package:dars_45_home/models/product.dart';
 import 'package:flutter/material.dart';
@@ -188,7 +187,7 @@ class _DialogForProductsState extends State<DialogForProducts> {
                     )
                 ],
               ),
-              Column(
+              widget.isEdit ? SizedBox() : Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -217,25 +216,42 @@ class _DialogForProductsState extends State<DialogForProducts> {
           },
           child: Text("Cancel"),
         ),
-        imgs.length == 3
+        imgs.length >= 3 || widget.isEdit
             ? ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     if (productStatus != "Poduct Status") {
                       error = null;
-                      productsController.addProductInFirebase(
-                        Product(
-                            globalId: '',
-                            id: 1,
+                      if (widget.isEdit) {
+                        productsController.editProduct(
+                          Product(
+                            globalId: widget.product!.globalId,
+                            id: widget.product!.id,
                             title: productTitle.text,
                             price: double.parse(productPrice.text),
-                            imgs: [],
-                            isFavorite: false,
+                            imgs: widget.product!.imgs,
                             rating: double.parse(productRating.text),
                             description: productDescription.text,
-                            status: productStatus),
-                        imgs,
-                      );
+                            isFavorite: widget.product!.isFavorite,
+                            status: productStatus,
+                          ),
+                        );
+                      } else {
+                        await productsController.addProductInFirebase(
+                          Product(
+                              globalId: '',
+                              id: 1,
+                              title: productTitle.text,
+                              price: double.parse(productPrice.text),
+                              imgs: [],
+                              isFavorite: false,
+                              rating: double.parse(productRating.text),
+                              description: productDescription.text,
+                              status: productStatus),
+                          imgs,
+                        );
+                      }
+                      Navigator.pop(context);
                     } else {
                       setState(() {
                         error = "Please,retunr choose product status";

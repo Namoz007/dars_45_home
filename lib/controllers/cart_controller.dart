@@ -12,7 +12,6 @@ class CartController extends ChangeNotifier{
 
   void addOrderProducts(){
     _ordered.add(_carts);
-    print(_ordered);
     _carts = [];
     notifyListeners();
   }
